@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import SnapKit
+
+let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 
 class KeyboardViewController: UIInputViewController {
 
@@ -13,6 +16,26 @@ class KeyboardViewController: UIInputViewController {
     
     override func loadView() {
         super.loadView()
+        
+        let rows = keys.map { row -> UIStackView in
+            
+            let rowKeys = row.map { char -> KeyButton in
+                let keyButton = KeyButton()
+                keyButton.label.text = String(char)
+                keyButton.addTarget(self, action: #selector(keyPressed(sender:)), for: .touchUpInside)
+                return keyButton
+            }
+            let rowStackView = UIStackView(arrangedSubviews: rowKeys)
+            rowStackView.distribution = .equalSpacing
+            return rowStackView
+        }
+        
+        let rowsStackView = UIStackView(arrangedSubviews: rows)
+        rowsStackView.axis = .vertical
+        view.addSubview(rowsStackView)
+        rowsStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     override func updateViewConstraints() {
@@ -37,11 +60,12 @@ class KeyboardViewController: UIInputViewController {
         
         self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated
+    @objc func keyPressed(sender: KeyButton?) {
+        let title = sender?.label.text
+        (textDocumentProxy as UIKeyInput).insertText(title!)
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
