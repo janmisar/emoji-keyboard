@@ -10,20 +10,31 @@ import UIKit
 class KeyButton: UIButton {
 
     private weak var backgroundView: UIView!
-    weak var label: UILabel!
+    private weak var label: UILabel!
+    private weak var iconView: UIImageView!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    var key: Key {
+        didSet {
+            set(key: key)
+        }
+    }
+    
+    init(key: Key) {
+        self.key = key
+        super.init(frame: .zero)
         
         backgroundColor = .clear
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.35
-        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowOffset = CGSize(width: 0, height: 1.5)
         layer.shadowRadius = 0
+        
+        snp.makeConstraints { make in
+            make.height.equalTo(43)
+        }
         
         let backgroundView = UIView()
         backgroundView.isUserInteractionEnabled = false
-        backgroundView.backgroundColor = .white
         backgroundView.layer.cornerRadius = 5
         addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in
@@ -33,27 +44,44 @@ class KeyButton: UIButton {
         self.backgroundView = backgroundView
         
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 25)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .light)
         backgroundView.addSubview(label)
         label.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.leading.top.greaterThanOrEqualTo(6)
-            make.trailing.bottom.lessThanOrEqualTo(-6)
+            make.leading.greaterThanOrEqualTo(7)
+            make.trailing.lessThanOrEqualTo(-7)
         }
         self.label = label
         
+        let iconView = UIImageView()
+        iconView.tintColor = .black
+        addSubview(iconView)
+        iconView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.trailing.lessThanOrEqualTo(9)
+            make.leading.greaterThanOrEqualTo(-9)
+        }
+        self.iconView = iconView
+        
+        set(key: key)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var isHighlighted: Bool{
+    private func set(key: Key) {
+        label.text = key.title
+        iconView.image = key.image
+        backgroundView.backgroundColor = key.color
+    }
+    
+    override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                backgroundView.backgroundColor = UIColor(red: 172.0/255, green: 179.0/255, blue: 188.0/255, alpha: 1)
+                backgroundView.backgroundColor = key.color.darkened()
             } else {
-                backgroundView.backgroundColor = .white
+                backgroundView.backgroundColor = key.color
             }
         }
     }

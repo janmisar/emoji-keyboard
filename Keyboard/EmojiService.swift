@@ -20,7 +20,7 @@ class EmojiService {
     let emojis: [Emoji]
     
     init() {
-        
+        // better data source! https://unicodey.com/emoji-data/table.htm
         let emojiData = try! Data(contentsOf: Bundle.main.url(forResource: "emoji", withExtension: "json")!)
         emojis = try! JSONDecoder().decode([Emoji].self, from: emojiData)
     }

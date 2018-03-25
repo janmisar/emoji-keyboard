@@ -10,10 +10,10 @@ import SnapKit
 
 let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 
-class KeyboardViewController: UIInputViewController {
+class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
 
-    @IBOutlet var nextKeyboardButton: UIButton!
     weak var resultsLabel: UILabel!
+    weak var keyboardView: KeyboardView!
     
     override func loadView() {
         super.loadView()
@@ -25,26 +25,13 @@ class KeyboardViewController: UIInputViewController {
         }
         self.resultsLabel = resultsLabel
         
-        let rows = keys.map { row -> UIStackView in
-            
-            let rowKeys = row.map { char -> KeyButton in
-                let keyButton = KeyButton()
-                keyButton.label.text = String(char)
-                keyButton.addTarget(self, action: #selector(keyPressed(sender:)), for: .touchUpInside)
-                return keyButton
-            }
-            let rowStackView = UIStackView(arrangedSubviews: rowKeys)
-            rowStackView.distribution = .equalSpacing
-            return rowStackView
-        }
-        
-        let rowsStackView = UIStackView(arrangedSubviews: rows)
-        rowsStackView.axis = .vertical
-        view.addSubview(rowsStackView)
-        rowsStackView.snp.makeConstraints { make in
+        let keyboardView = KeyboardView()
+        view.addSubview(keyboardView)
+        keyboardView.snp.makeConstraints { make in
             make.top.equalTo(resultsLabel.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
+        self.keyboardView = keyboardView
     }
     
     override func updateViewConstraints() {
@@ -56,19 +43,7 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Perform custom UI setup here
-        self.nextKeyboardButton = UIButton(type: .system)
-        
-        self.nextKeyboardButton.setTitle(NSLocalizedString("Next Keyboard", comment: "Title for 'Next Keyboard' button"), for: [])
-        self.nextKeyboardButton.sizeToFit()
-        self.nextKeyboardButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.nextKeyboardButton.addTarget(self, action: #selector(handleInputModeList(from:with:)), for: .allTouchEvents)
-        
-        self.view.addSubview(self.nextKeyboardButton)
-        
-        self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        keyboardView.delegate = self
     }
     
     var typedText: String = "" {
@@ -79,11 +54,20 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
-    @objc func keyPressed(sender: KeyButton) {
-        let letter = sender.label.text!
-        typedText.append(letter)
+    func keyboardView(_ keyboardView: KeyboardView, didTap key: Key) {
+        switch key {
+        case .letter(let char):
+            typedText.append(char)
+            (textDocumentProxy as UIKeyInput).insertText(String(char))
+        case .backspace:
+            if !typedText.isEmpty {
+                typedText.remove(at: typedText.index(before: typedText.endIndex))
+            }
+            (textDocumentProxy as UIKeyInput).deleteBackward()
+        case .nextKeyboard:
+            advanceToNextInputMode()
+        }
         
-        (textDocumentProxy as UIKeyInput).insertText(letter)
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
@@ -92,15 +76,6 @@ class KeyboardViewController: UIInputViewController {
     
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
-        
-        var textColor: UIColor
-        let proxy = self.textDocumentProxy
-        if proxy.keyboardAppearance == UIKeyboardAppearance.dark {
-            textColor = UIColor.white
-        } else {
-            textColor = UIColor.black
-        }
-        self.nextKeyboardButton.setTitleColor(textColor, for: [])
     }
 
 }
