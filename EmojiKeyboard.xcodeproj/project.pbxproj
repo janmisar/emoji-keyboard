@@ -16,6 +16,9 @@
 		882DD6CA206818280041647A /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6C9206818280041647A /* KeyboardViewController.swift */; };
 		882DD6CE206818280041647A /* Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 882DD6C7206818270041647A /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		882DD6D4206819B00041647A /* KeyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6D3206819B00041647A /* KeyButton.swift */; };
+		882DD6D8206839E30041647A /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 882DD6D6206839DF0041647A /* emoji.json */; };
+		88D112AF20683BC2005B71A8 /* EmojiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D112AE20683BC2005B71A8 /* EmojiService.swift */; };
+		88D112B020683EEC005B71A8 /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 882DD6D6206839DF0041647A /* emoji.json */; };
 		B05DA2D841D12DD1C42795DE /* Pods_Keyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E1F7600F60913459F36A62 /* Pods_Keyboard.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,8 @@
 		882DD6C9206818280041647A /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		882DD6CB206818280041647A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		882DD6D3206819B00041647A /* KeyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyButton.swift; sourceTree = "<group>"; };
+		882DD6D6206839DF0041647A /* emoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
+		88D112AE20683BC2005B71A8 /* EmojiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiService.swift; sourceTree = "<group>"; };
 		BD75A6FD782772721911D69C /* Pods-EmojiKeyboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmojiKeyboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EmojiKeyboard/Pods-EmojiKeyboard.debug.xcconfig"; sourceTree = "<group>"; };
 		D4E1F7600F60913459F36A62 /* Pods_Keyboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Keyboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F86F2B70ED890F27BAE09F35 /* Pods-EmojiKeyboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmojiKeyboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-EmojiKeyboard/Pods-EmojiKeyboard.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,6 +102,7 @@
 		882DD6A52068165E0041647A = {
 			isa = PBXGroup;
 			children = (
+				882DD6D5206839B40041647A /* Resources */,
 				882DD6B02068165E0041647A /* EmojiKeyboard */,
 				882DD6C8206818280041647A /* Keyboard */,
 				882DD6AF2068165E0041647A /* Products */,
@@ -130,11 +136,20 @@
 		882DD6C8206818280041647A /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				88D112AE20683BC2005B71A8 /* EmojiService.swift */,
 				882DD6C9206818280041647A /* KeyboardViewController.swift */,
 				882DD6D3206819B00041647A /* KeyButton.swift */,
 				882DD6CB206818280041647A /* Info.plist */,
 			);
 			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		882DD6D5206839B40041647A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				882DD6D6206839DF0041647A /* emoji.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		9C7BF1F722E96B2E4B1CF3CA /* Frameworks */ = {
@@ -235,6 +250,7 @@
 			files = (
 				882DD6BC2068165E0041647A /* LaunchScreen.storyboard in Resources */,
 				882DD6B92068165E0041647A /* Assets.xcassets in Resources */,
+				88D112B020683EEC005B71A8 /* emoji.json in Resources */,
 				882DD6B72068165E0041647A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				882DD6D8206839E30041647A /* emoji.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88D112AF20683BC2005B71A8 /* EmojiService.swift in Sources */,
 				882DD6CA206818280041647A /* KeyboardViewController.swift in Sources */,
 				882DD6D4206819B00041647A /* KeyButton.swift in Sources */,
 			);

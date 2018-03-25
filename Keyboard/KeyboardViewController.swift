@@ -13,9 +13,17 @@ let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 class KeyboardViewController: UIInputViewController {
 
     @IBOutlet var nextKeyboardButton: UIButton!
+    weak var resultsLabel: UILabel!
     
     override func loadView() {
         super.loadView()
+        
+        let resultsLabel = UILabel()
+        view.addSubview(resultsLabel)
+        resultsLabel.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+        }
+        self.resultsLabel = resultsLabel
         
         let rows = keys.map { row -> UIStackView in
             
@@ -34,7 +42,8 @@ class KeyboardViewController: UIInputViewController {
         rowsStackView.axis = .vertical
         view.addSubview(rowsStackView)
         rowsStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(resultsLabel.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -60,12 +69,21 @@ class KeyboardViewController: UIInputViewController {
         
         self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        
     }
     
-    @objc func keyPressed(sender: KeyButton?) {
-        let title = sender?.label.text
-        (textDocumentProxy as UIKeyInput).insertText(title!)
+    var typedText: String = "" {
+        didSet {
+            resultsLabel.text = EmojiService.shared.emojis.filter { emoji in
+                return !(emoji.short_names.filter { $0.contains(typedText) }.isEmpty)
+                }.map { $0.content }.joined(separator: "|")
+        }
+    }
+    
+    @objc func keyPressed(sender: KeyButton) {
+        let letter = sender.label.text!
+        typedText.append(letter)
+        
+        (textDocumentProxy as UIKeyInput).insertText(letter)
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
