@@ -14,6 +14,7 @@
 		882DD6BC2068165E0041647A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 882DD6BA2068165E0041647A /* LaunchScreen.storyboard */; };
 		882DD6CA206818280041647A /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6C9206818280041647A /* KeyboardViewController.swift */; };
 		882DD6CE206818280041647A /* Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 882DD6C7206818270041647A /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		882DD6D4206819B00041647A /* KeyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6D3206819B00041647A /* KeyButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		882DD6C7206818270041647A /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		882DD6C9206818280041647A /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		882DD6CB206818280041647A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		882DD6D3206819B00041647A /* KeyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				882DD6C9206818280041647A /* KeyboardViewController.swift */,
+				882DD6D3206819B00041647A /* KeyButton.swift */,
 				882DD6CB206818280041647A /* Info.plist */,
 			);
 			path = Keyboard;
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				882DD6CA206818280041647A /* KeyboardViewController.swift in Sources */,
+				882DD6D4206819B00041647A /* KeyButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
