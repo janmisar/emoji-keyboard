@@ -12,23 +12,23 @@ let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 
 class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
 
-    weak var resultsLabel: UILabel!
+    weak var autocompleteView: AutocompleteView!
     weak var keyboardView: KeyboardView!
     
     override func loadView() {
         super.loadView()
         
-        let resultsLabel = UILabel()
-        view.addSubview(resultsLabel)
-        resultsLabel.snp.makeConstraints { make in
+        let autocompleteView = AutocompleteView()
+        view.addSubview(autocompleteView)
+        autocompleteView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
         }
-        self.resultsLabel = resultsLabel
+        self.autocompleteView = autocompleteView
         
         let keyboardView = KeyboardView()
         view.addSubview(keyboardView)
         keyboardView.snp.makeConstraints { make in
-            make.top.equalTo(resultsLabel.snp.bottom)
+            make.top.equalTo(autocompleteView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
         self.keyboardView = keyboardView
@@ -48,7 +48,7 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
     
     var typedText: String = "" {
         didSet {
-            resultsLabel.text = EmojiService.emojis(for: typedText).map { $0.char }.joined(separator: "|")
+            autocompleteView.inputText = typedText
         }
     }
     
