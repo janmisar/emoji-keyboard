@@ -7,21 +7,20 @@
 
 import Foundation
 
-struct Emoji: Codable {
-    let content: String
-    let short_names: [String]
-    let keywords: [String]
+struct Emoji {
+    let char: String
+    let names: [String]
 }
+
+// TODO: deal with unsupported emoji https://stackoverflow.com/questions/41318999/is-there-a-way-to-know-if-an-emoji-is-supported-in-
 
 class EmojiService {
     
     static let shared = EmojiService()
     
-    let emojis: [Emoji]
-    
-    init() {
-        // better data source! https://unicodey.com/emoji-data/table.htm
-        let emojiData = try! Data(contentsOf: Bundle.main.url(forResource: "emoji", withExtension: "json")!)
-        emojis = try! JSONDecoder().decode([Emoji].self, from: emojiData)
+    static func emojis(for input: String) -> [Emoji] {
+        return allEmojis.filter { emoji in
+            return !(emoji.names.filter { $0.contains(input) }.isEmpty)
+        }
     }
 }

@@ -48,9 +48,7 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
     
     var typedText: String = "" {
         didSet {
-            resultsLabel.text = EmojiService.shared.emojis.filter { emoji in
-                return !(emoji.short_names.filter { $0.contains(typedText) }.isEmpty)
-                }.map { $0.content }.joined(separator: "|")
+            resultsLabel.text = EmojiService.emojis(for: typedText).map { $0.char }.joined(separator: "|")
         }
     }
     
