@@ -20,14 +20,12 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
     
     private weak var collectionView: UICollectionView!
     
+    var handle: NSKeyValueObservation!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
-        
         let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = CGSize(width: 100, height: 20)
-
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -38,11 +36,20 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
             make.edges.equalToSuperview()
         }
         self.collectionView = collectionView
+        
+        handle = collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
+            self?.invalidateIntrinsicContentSize()
+            self?.layoutIfNeeded()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: CollectionView
+    
+    private static let prototypeCell: EmojiSuggestionCell = EmojiSuggestionCell(frame: .zero)
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -58,8 +65,16 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = AutocompleteView.prototypeCell
+        cell.emoji = emojis[indexPath.item]
+        cell.layoutIfNeeded()
+        let size = cell.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        return CGSize(width: min(size.width, self.frame.width), height: size.height)
+    }
+    
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: superview?.frame.size.width ?? 0, height: 100)
+        return CGSize(width: collectionView.contentSize.width, height: min(collectionView.contentSize.height, 102))
     }
 }
 

@@ -18,9 +18,10 @@ class EmojiService {
     
     static let shared = EmojiService()
     
-    static func emojis(for input: String) -> [Emoji] {
-        return allEmojis.filter { emoji in
+    static func emojis(for input: String, limit: Int = 100) -> [Emoji] {
+        let filtered = allEmojis.filter { emoji in
             return !(emoji.names.filter { $0.contains(input) }.isEmpty)
         }
+        return Array(filtered.prefix(limit))
     }
 }
