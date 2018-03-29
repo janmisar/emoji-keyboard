@@ -18,6 +18,7 @@
 		882DD6D4206819B00041647A /* KeyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6D3206819B00041647A /* KeyButton.swift */; };
 		8887CFB1206A19A2003502C9 /* Emojis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8887CFB0206A19A2003502C9 /* Emojis.swift */; };
 		8887CFB3206A1D3E003502C9 /* AutocompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */; };
+		8887CFC8206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8887CFC7206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m */; };
 		88D112AF20683BC2005B71A8 /* EmojiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D112AE20683BC2005B71A8 /* EmojiService.swift */; };
 		88D112B2206847BE005B71A8 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D112B1206847BE005B71A8 /* KeyboardView.swift */; };
 		88D112B4206848F2005B71A8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D112B3206848F2005B71A8 /* Constants.swift */; };
@@ -66,6 +67,9 @@
 		882DD6D3206819B00041647A /* KeyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyButton.swift; sourceTree = "<group>"; };
 		8887CFB0206A19A2003502C9 /* Emojis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emojis.swift; sourceTree = "<group>"; };
 		8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteView.swift; sourceTree = "<group>"; };
+		8887CFC5206D35E8003502C9 /* Keyboard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Keyboard-Bridging-Header.h"; sourceTree = "<group>"; };
+		8887CFC6206D35E9003502C9 /* UICollectionViewLeftAlignedLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICollectionViewLeftAlignedLayout.h; sourceTree = "<group>"; };
+		8887CFC7206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewLeftAlignedLayout.m; sourceTree = "<group>"; };
 		88D112AE20683BC2005B71A8 /* EmojiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiService.swift; sourceTree = "<group>"; };
 		88D112B1206847BE005B71A8 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		88D112B3206848F2005B71A8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -143,12 +147,14 @@
 		882DD6C8206818280041647A /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				8887CFC4206D35BC003502C9 /* UICollectionViewLeftAlignedLayout */,
 				8887CFB0206A19A2003502C9 /* Emojis.swift */,
 				88D112AE20683BC2005B71A8 /* EmojiService.swift */,
 				88D112B1206847BE005B71A8 /* KeyboardView.swift */,
 				8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */,
 				882DD6C9206818280041647A /* KeyboardViewController.swift */,
 				882DD6D3206819B00041647A /* KeyButton.swift */,
+				8887CFC5206D35E8003502C9 /* Keyboard-Bridging-Header.h */,
 				882DD6CB206818280041647A /* Info.plist */,
 				88D112B3206848F2005B71A8 /* Constants.swift */,
 				88D112B5206853D3005B71A8 /* Images.xcassets */,
@@ -161,6 +167,15 @@
 			children = (
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		8887CFC4206D35BC003502C9 /* UICollectionViewLeftAlignedLayout */ = {
+			isa = PBXGroup;
+			children = (
+				8887CFC6206D35E9003502C9 /* UICollectionViewLeftAlignedLayout.h */,
+				8887CFC7206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m */,
+			);
+			path = UICollectionViewLeftAlignedLayout;
 			sourceTree = "<group>";
 		};
 		9C7BF1F722E96B2E4B1CF3CA /* Frameworks */ = {
@@ -231,6 +246,7 @@
 					};
 					882DD6C6206818270041647A = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -378,6 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8887CFC8206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m in Sources */,
 				8887CFB3206A1D3E003502C9 /* AutocompleteView.swift in Sources */,
 				8887CFB1206A19A2003502C9 /* Emojis.swift in Sources */,
 				88D112B4206848F2005B71A8 /* Constants.swift in Sources */,
@@ -566,6 +583,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 697E7797E0FA371BE46B4339 /* Pods-Keyboard.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = PXDF48X6VX;
 				INFOPLIST_FILE = Keyboard/Info.plist;
@@ -575,6 +593,8 @@
 				PROVISIONING_PROFILE = "1b66b3aa-22bf-4e92-b766-0140b8d9b8c4";
 				PROVISIONING_PROFILE_SPECIFIER = "match Development cz.ackee.enterprise.*";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Keyboard/Keyboard-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -584,6 +604,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2ABC4C23BEA6F3302409F61D /* Pods-Keyboard.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Keyboard/Info.plist;
@@ -592,6 +613,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Keyboard/Keyboard-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -25,10 +25,10 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let layout = UICollectionViewFlowLayout()
+        let layout = UICollectionViewLeftAlignedLayout()
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .yellow
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
@@ -92,6 +92,8 @@ class EmojiSuggestionCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        backgroundColor = .green
         
         let emojiLabel = UILabel()
         contentView.addSubview(emojiLabel)
