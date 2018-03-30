@@ -36,9 +36,9 @@ enum Key {
     var color: UIColor {
         switch self {
         case .letter(_):
-            return letterKeyColor
+            return KeyStyle.letterBackgroundColor
         default:
-            return controlKeyColor
+            return KeyStyle.controlBackgroundColor
         }
     }
 }
@@ -54,38 +54,63 @@ class KeyboardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let contentView = UIView()
-        addSubview(contentView)
-        contentView.snp.makeConstraints { make in
-            make.top.equalTo(6)
-            make.bottom.equalTo(-5)
-            make.leading.equalTo(3)
-            make.trailing.equalTo(-3)
-        }
-        
-        let row1 = "qwertzuiop".map { Key.letter($0) }
-        let row2 = "asdfghjkl-".map { Key.letter($0) }
-        let row3: [Key] = [.nextKeyboard] + "yxcvbnm".map({ .letter($0) }) + [.backspace]
-        
-        let rows = [row1, row2, row3].map { row -> UIStackView in
+        let charToKeyButton: (Character) -> KeyButton = { char in
+            let key = Key.letter(char)
             
-            let rowKeys = row.map { key -> KeyButton in
-                let keyButton = KeyButton(key: key)
-                keyButton.addTarget(self, action: #selector(keyPressed(sender:)), for: .touchUpInside)
-                return keyButton
-            }
-            let rowStackView = UIStackView(arrangedSubviews: rowKeys)
-            rowStackView.distribution = .equalCentering
-            return rowStackView
+            let keyButton = KeyButton(key: key)
+            keyButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
+            return keyButton
         }
         
-        let rowsStackView = UIStackView(arrangedSubviews: rows)
-        rowsStackView.axis = .vertical
-        rowsStackView.spacing = 11
-        contentView.addSubview(rowsStackView)
-        rowsStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        let row1 = UIStackView(arrangedSubviews: "qwertzuiop".map(charToKeyButton))
+        row1.distribution = .fillEqually
+        addSubview(row1)
+        row1.snp.makeConstraints({ (make) in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(keySize.height+11)
+        })
+        
+        
+        let row2 = UIStackView(arrangedSubviews: "asdfghjkl".map(charToKeyButton))
+        addSubview(row2)
+        row2.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
+        row2.snp.makeConstraints({ (make) in
+            make.top.equalTo(row1.snp.bottom)
+            make.leading.greaterThanOrEqualToSuperview()
+            make.trailing.lessThanOrEqualToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(keySize.height+11)
+        })
+        
+        let row3 = UIStackView(arrangedSubviews: "yxcvbnm".map(charToKeyButton))
+        addSubview(row3)
+        row3.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
+        row3.snp.makeConstraints({ (make) in
+            make.top.equalTo(row2.snp.bottom)
+            make.leading.greaterThanOrEqualToSuperview()
+            make.trailing.lessThanOrEqualToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(keySize.height+11)
+            make.bottom.equalToSuperview()
+        })
+        
+        let nextKeyboardButton = KeyButton(key: .nextKeyboard)
+        addSubview(nextKeyboardButton)
+        nextKeyboardButton.snp.makeConstraints { make in
+            make.leading.bottom.equalToSuperview()
+            make.height.equalTo(keySize.height+11)
+            make.trailing.equalTo(row3.snp.leading).offset(-4)
         }
+        nextKeyboardButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
+        
+        let backspaceButton = KeyButton(key: .backspace)
+        addSubview(backspaceButton)
+        backspaceButton.snp.makeConstraints { make in
+            make.trailing.bottom.equalToSuperview()
+            make.height.equalTo(keySize.height+11)
+            make.leading.equalTo(row3.snp.trailing).offset(4)
+        }
+        backspaceButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {

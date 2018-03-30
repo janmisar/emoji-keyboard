@@ -8,7 +8,7 @@
 import UIKit
 
 class KeyButton: UIButton {
-
+    
     private weak var backgroundView: UIView!
     private weak var label: UILabel!
     private weak var iconView: UIImageView!
@@ -23,43 +23,42 @@ class KeyButton: UIButton {
         self.key = key
         super.init(frame: .zero)
         
-        backgroundColor = .clear
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.35
-        layer.shadowOffset = CGSize(width: 0, height: 1.5)
-        layer.shadowRadius = 0
+        backgroundColor = keyboardBackgroundColor
         
-        snp.makeConstraints { make in
-            make.height.equalTo(43)
+        let shadowWrapper = UIView()
+        shadowWrapper.isUserInteractionEnabled = false
+        shadowWrapper.layer.shadowColor = KeyStyle.shadowColor
+        shadowWrapper.layer.shadowOpacity = KeyStyle.shadowOpacity
+        shadowWrapper.layer.shadowOffset = KeyStyle.shadowOffset
+        shadowWrapper.layer.shadowRadius = KeyStyle.shadowRadius
+        addSubview(shadowWrapper)
+        shadowWrapper.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         let backgroundView = UIView()
-        backgroundView.isUserInteractionEnabled = false
         backgroundView.layer.cornerRadius = 5
-        addSubview(backgroundView)
+        shadowWrapper.addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-            make.bottom.equalTo(-1)
+            make.leading.trailing.equalToSuperview().inset(keysHorizontalSpacing_2)
+            make.top.bottom.equalToSuperview().inset(keysVerticalSpacing_2)
         }
         self.backgroundView = backgroundView
         
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 25, weight: .light)
+        label.font = KeyStyle.font
+        label.textColor = KeyStyle.textColor
         backgroundView.addSubview(label)
         label.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.leading.greaterThanOrEqualTo(7)
-            make.trailing.lessThanOrEqualTo(-7)
         }
         self.label = label
         
         let iconView = UIImageView()
-        iconView.tintColor = .black
-        addSubview(iconView)
+        iconView.tintColor = KeyStyle.textColor
+        backgroundView.addSubview(iconView)
         iconView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.trailing.lessThanOrEqualTo(9)
-            make.leading.greaterThanOrEqualTo(-9)
         }
         self.iconView = iconView
         

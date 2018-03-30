@@ -7,8 +7,13 @@
 
 import UIKit
 
-final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+protocol AutocompleteViewDelegate: class {
+    func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: Emoji)
+}
 
+final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    weak var delegate: AutocompleteViewDelegate?
+    
     var inputText: String? {
         didSet {
             emojis = inputText.flatMap({ EmojiService.emojis(for: $0) }) ?? []
@@ -71,6 +76,11 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
         cell.layoutIfNeeded()
         let size = cell.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
         return CGSize(width: min(size.width, self.frame.width), height: size.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let emoji = emojis[indexPath.item]
+        delegate?.autocompleteView(self, didSelectEmoji: emoji)
     }
     
     override var intrinsicContentSize: CGSize {

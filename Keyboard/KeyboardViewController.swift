@@ -10,7 +10,7 @@ import SnapKit
 
 let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 
-class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
+class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, AutocompleteViewDelegate {
 
     weak var autocompleteView: AutocompleteView!
     weak var keyboardView: KeyboardView!
@@ -44,6 +44,7 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
         super.viewDidLoad()
         
         keyboardView.delegate = self
+        autocompleteView.delegate = self
     }
     
     var typedText: String = "" {
@@ -66,6 +67,14 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate {
             advanceToNextInputMode()
         }
         
+    }
+    
+    func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: Emoji) {
+        (0..<typedText.count).forEach { _ in
+            (textDocumentProxy as UIKeyInput).deleteBackward()
+        }
+        (textDocumentProxy as UIKeyInput).insertText(emoji.char)
+        typedText = ""
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
