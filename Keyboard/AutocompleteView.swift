@@ -37,12 +37,6 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        addSubview(backgroundView)
-        backgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         let layout = UICollectionViewLeftAlignedLayout()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)

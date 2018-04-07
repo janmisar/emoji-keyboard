@@ -25,10 +25,10 @@ class EmojiSuggestionCell: UICollectionViewCell {
         
         let roundedView = UIView()
         roundedView.layer.cornerRadius = 10
-        roundedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        roundedView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         contentView.addSubview(roundedView)
         roundedView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 2, left: 3, bottom: 2, right: 3))
         }
         self.roundedView = roundedView
         
