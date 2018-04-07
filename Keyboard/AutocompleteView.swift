@@ -31,9 +31,9 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
         super.init(frame: frame)
         
         let layout = UICollectionViewLeftAlignedLayout()
-
+        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .yellow
+        collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
@@ -41,6 +41,14 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
             make.edges.equalToSuperview()
         }
         self.collectionView = collectionView
+        
+        let separator = UIView()
+        separator.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        addSubview(separator)
+        separator.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(1/UIScreen.main.scale)
+        }
         
         handle = collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
             self?.invalidateIntrinsicContentSize()
@@ -103,20 +111,29 @@ class EmojiSuggestionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .green
+        let roundedView = UIView()
+        roundedView.layer.cornerRadius = 10
+        roundedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        contentView.addSubview(roundedView)
+        roundedView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         let emojiLabel = UILabel()
-        contentView.addSubview(emojiLabel)
+        emojiLabel.font = UIFont.systemFont(ofSize: 28)
+        roundedView.addSubview(emojiLabel)
         emojiLabel.snp.makeConstraints { make in
-            make.leading.top.bottom.equalToSuperview()
+            make.leading.equalTo(4)
+            make.top.bottom.equalToSuperview().inset(2)
         }
         self.emojiLabel = emojiLabel
         
         let nameLabel = UILabel()
-        contentView.addSubview(nameLabel)
+        roundedView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(emojiLabel.snp.trailing)
-            make.trailing.top.bottom.equalToSuperview()
+            make.leading.equalTo(emojiLabel.snp.trailing).offset(2)
+            make.top.bottom.equalToSuperview().inset(2)
+            make.trailing.equalTo(-4)
         }
         self.nameLabel = nameLabel
     }

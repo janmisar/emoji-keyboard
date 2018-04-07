@@ -33,12 +33,12 @@ enum Key {
         }
     }
     
-    var color: UIColor {
+    func color(darkMode: Bool) -> UIColor {
         switch self {
         case .letter(_):
-            return KeyStyle.letterBackgroundColor
+            return darkMode ? KeyStyle.letterBackgroundColorDark : KeyStyle.letterBackgroundColor
         default:
-            return KeyStyle.controlBackgroundColor
+            return darkMode ? KeyStyle.controlBackgroundColorDark : KeyStyle.controlBackgroundColor
         }
     }
 }
@@ -51,8 +51,21 @@ class KeyboardView: UIView {
 
     weak var delegate: KeyboardViewDelegate?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    var mode: UIKeyboardAppearance = .default {
+        didSet {
+            switch mode {
+            case .default, .light:
+                allKeyButtons.forEach { $0.darkMode = false }
+            case .dark:
+                allKeyButtons.forEach { $0.darkMode = true }
+            }
+        }
+    }
+    
+    private var allKeyButtons: [KeyButton] = []
+    
+    init(inputViewController: UIInputViewController) {
+        super.init(frame: .zero)
         
         let charToKeyButton: (Character) -> KeyButton = { char in
             let key = Key.letter(char)
@@ -62,7 +75,9 @@ class KeyboardView: UIView {
             return keyButton
         }
         
-        let row1 = UIStackView(arrangedSubviews: "qwertzuiop".map(charToKeyButton))
+        let keyButtons1 = "qwertzuiop".map(charToKeyButton)
+        allKeyButtons += keyButtons1
+        let row1 = UIStackView(arrangedSubviews: keyButtons1)
         row1.distribution = .fillEqually
         addSubview(row1)
         row1.snp.makeConstraints({ (make) in
@@ -70,8 +85,9 @@ class KeyboardView: UIView {
             make.height.equalTo(keySize.height+11)
         })
         
-        
-        let row2 = UIStackView(arrangedSubviews: "asdfghjkl".map(charToKeyButton))
+        let keyButtons2 = "asdfghjkl".map(charToKeyButton)
+        allKeyButtons += keyButtons2
+        let row2 = UIStackView(arrangedSubviews: keyButtons2)
         addSubview(row2)
         row2.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
         row2.snp.makeConstraints({ (make) in
@@ -82,7 +98,9 @@ class KeyboardView: UIView {
             make.height.equalTo(keySize.height+11)
         })
         
-        let row3 = UIStackView(arrangedSubviews: "yxcvbnm".map(charToKeyButton))
+        let keyButtons3 = "yxcvbnm".map(charToKeyButton)
+        allKeyButtons += keyButtons3
+        let row3 = UIStackView(arrangedSubviews: keyButtons3)
         addSubview(row3)
         row3.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
         row3.snp.makeConstraints({ (make) in
@@ -94,14 +112,18 @@ class KeyboardView: UIView {
             make.bottom.equalToSuperview()
         })
         
-        let nextKeyboardButton = KeyButton(key: .nextKeyboard)
-        addSubview(nextKeyboardButton)
-        nextKeyboardButton.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview()
-            make.height.equalTo(keySize.height+11)
-            make.trailing.equalTo(row3.snp.leading).offset(-4)
+        if inputViewController.needsInputModeSwitchKey {
+            let nextKeyboardButton = KeyButton(key: .nextKeyboard)
+            addSubview(nextKeyboardButton)
+            nextKeyboardButton.snp.makeConstraints { make in
+                make.leading.bottom.equalToSuperview()
+                make.height.equalTo(keySize.height+11)
+                make.trailing.equalTo(row3.snp.leading).offset(-4)
+            }
+            nextKeyboardButton.addTarget(inputViewController, action: #selector(UIInputViewController.handleInputModeList(from:with:)), for: .allTouchEvents)
+            
+            allKeyButtons.append(nextKeyboardButton)
         }
-        nextKeyboardButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
         
         let backspaceButton = KeyButton(key: .backspace)
         addSubview(backspaceButton)
@@ -111,13 +133,14 @@ class KeyboardView: UIView {
             make.leading.equalTo(row3.snp.trailing).offset(4)
         }
         backspaceButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
+        allKeyButtons.append(backspaceButton)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func keyPressed(sender: KeyButton) {
+    @objc private func keyPressed(sender: KeyButton) {
         delegate?.keyboardView(self, didTap: sender.key)
     }
 }

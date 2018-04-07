@@ -13,17 +13,19 @@ class KeyButton: UIButton {
     private weak var label: UILabel!
     private weak var iconView: UIImageView!
     
-    var key: Key {
+    var darkMode: Bool = false {
         didSet {
-            set(key: key)
+            updateAppearance()
         }
     }
+    
+    let key: Key
     
     init(key: Key) {
         self.key = key
         super.init(frame: .zero)
         
-        backgroundColor = keyboardBackgroundColor
+        backgroundColor = UIColor.white.withAlphaComponent(0.001) // not zero to be touchable
         
         let shadowWrapper = UIView()
         shadowWrapper.isUserInteractionEnabled = false
@@ -62,25 +64,27 @@ class KeyButton: UIButton {
         }
         self.iconView = iconView
         
-        set(key: key)
+        updateAppearance()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func set(key: Key) {
+    private func updateAppearance() {
         label.text = key.title
+        label.textColor = darkMode ? KeyStyle.textColorDark : KeyStyle.textColor
         iconView.image = key.image
-        backgroundView.backgroundColor = key.color
+        iconView.tintColor = darkMode ? KeyStyle.textColorDark : KeyStyle.textColor
+        backgroundView.backgroundColor = key.color(darkMode: darkMode)
     }
     
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                backgroundView.backgroundColor = key.color.darkened()
+                backgroundView.backgroundColor = key.color(darkMode: darkMode).darkened()
             } else {
-                backgroundView.backgroundColor = key.color
+                backgroundView.backgroundColor = key.color(darkMode: darkMode)
             }
         }
     }

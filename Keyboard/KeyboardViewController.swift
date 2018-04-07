@@ -25,7 +25,7 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
         }
         self.autocompleteView = autocompleteView
         
-        let keyboardView = KeyboardView()
+        let keyboardView = KeyboardView(inputViewController: self)
         view.addSubview(keyboardView)
         keyboardView.snp.makeConstraints { make in
             make.top.equalTo(autocompleteView.snp.bottom)
@@ -45,6 +45,12 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
         
         keyboardView.delegate = self
         autocompleteView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        keyboardView.mode = textDocumentProxy.keyboardAppearance ?? .default
     }
     
     var typedText: String = "" {
@@ -75,6 +81,8 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
         }
         (textDocumentProxy as UIKeyInput).insertText(emoji.char)
         typedText = ""
+        
+        advanceToNextInputMode()
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
@@ -84,5 +92,4 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
     }
-
 }
