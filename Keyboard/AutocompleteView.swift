@@ -7,8 +7,15 @@
 
 import UIKit
 
+let favorites = [
+    "🙂", "😊", "😄", "😂", "😐", "😕", "😞", "😢",
+    "🤔", "😏", "😮", "🙄", "😬", "😱", "😈", "😜",
+    "❤️", "😍", "👻", "😎", "😠", "🤷‍♂️", "👎", "👍"
+]
+
 protocol AutocompleteViewDelegate: class {
     func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: Emoji)
+    func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: String)
 }
 
 final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -30,10 +37,16 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        addSubview(backgroundView)
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         let layout = UICollectionViewLeftAlignedLayout()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor.white.withAlphaComponent(0.001)
         collectionView.delegate = self
         collectionView.dataSource = self
         addSubview(collectionView)
@@ -65,80 +78,126 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
     private static let prototypeCell: EmojiSuggestionCell = EmojiSuggestionCell(frame: .zero)
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return emojis.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: EmojiSuggestionCell = collectionView.dequeueCell(for: indexPath)
-        cell.emoji = emojis[indexPath.item]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = AutocompleteView.prototypeCell
-        cell.emoji = emojis[indexPath.item]
-        cell.layoutIfNeeded()
-        let size = cell.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
-        return CGSize(width: min(size.width, self.frame.width), height: size.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let emoji = emojis[indexPath.item]
-        delegate?.autocompleteView(self, didSelectEmoji: emoji)
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: collectionView.contentSize.width, height: min(collectionView.contentSize.height, 102))
-    }
-}
-
-class EmojiSuggestionCell: UICollectionViewCell {
-    
-    var emoji: Emoji? {
-        didSet {
-            emojiLabel.text = emoji?.char
-            nameLabel.text = emoji?.names.first
+        switch section {
+        case 0:
+            return emojis.count == 0 ? favorites.count : 0
+        case 1:
+            return emojis.count
+        default:
+            return 0
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell: FavoriteEmojiCell = collectionView.dequeueCell(for: indexPath)
+            cell.emoji = Character(favorites[indexPath.item])
+            return cell
+        case 1:
+            let cell: EmojiSuggestionCell = collectionView.dequeueCell(for: indexPath)
+            cell.emoji = emojis[indexPath.item]
+            return cell
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch indexPath.section {
+        case 0:
+            return CGSize(width: collectionView.frame.width/8, height: 35)
+        case 1:
+            let cell = AutocompleteView.prototypeCell
+            cell.emoji = emojis[indexPath.item]
+            cell.layoutIfNeeded()
+            let size = cell.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            return CGSize(width: min(size.width, self.frame.width), height: size.height)
+        default:
+            return .zero
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            let emoji = favorites[indexPath.item]
+            delegate?.autocompleteView(self, didSelectEmoji: emoji)
+        case 1:
+            let emoji = emojis[indexPath.item]
+            delegate?.autocompleteView(self, didSelectEmoji: emoji)
+        default:
+            break
+        }
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .zero
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: collectionView.contentSize.width, height: min(collectionView.contentSize.height, 110))
+    }
+}
+
+class FavoriteEmojiCell: UICollectionViewCell {
+    var emoji: Character? {
+        didSet {
+            emojiLabel.text = emoji.map { String($0) }
+        }
+    }
+    
+    private weak var roundedView: UIView!
     private weak var emojiLabel: UILabel!
-    private weak var nameLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let roundedView = UIView()
         roundedView.layer.cornerRadius = 10
-        roundedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         contentView.addSubview(roundedView)
         roundedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        self.roundedView = roundedView
         
         let emojiLabel = UILabel()
         emojiLabel.font = UIFont.systemFont(ofSize: 28)
-        roundedView.addSubview(emojiLabel)
+        emojiLabel.textAlignment = .center
+        //emojiLabel.backgroundColor = UIColor.random()
+        emojiLabel.adjustsFontSizeToFitWidth = true
+        contentView.addSubview(emojiLabel)
         emojiLabel.snp.makeConstraints { make in
-            make.leading.equalTo(4)
-            make.top.bottom.equalToSuperview().inset(2)
+            make.edges.equalToSuperview()
         }
         self.emojiLabel = emojiLabel
-        
-        let nameLabel = UILabel()
-        roundedView.addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(emojiLabel.snp.trailing).offset(2)
-            make.top.bottom.equalToSuperview().inset(2)
-            make.trailing.equalTo(-4)
-        }
-        self.nameLabel = nameLabel
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                roundedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+            } else {
+                roundedView.backgroundColor = .clear
+            }
+        }
     }
 }

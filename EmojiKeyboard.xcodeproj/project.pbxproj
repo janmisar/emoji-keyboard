@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01FB301ADB690FEFE56B02F9 /* Pods_EmojiKeyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44726003CD57D48189A591AB /* Pods_EmojiKeyboard.framework */; };
+		881D1F8B207919ED00D856F3 /* EmojiSuggestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881D1F8A207919ED00D856F3 /* EmojiSuggestionCell.swift */; };
 		882DD6B22068165E0041647A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6B12068165E0041647A /* AppDelegate.swift */; };
 		882DD6B42068165E0041647A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882DD6B32068165E0041647A /* ViewController.swift */; };
 		882DD6B72068165E0041647A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 882DD6B52068165E0041647A /* Main.storyboard */; };
@@ -58,6 +59,7 @@
 		2ABC4C23BEA6F3302409F61D /* Pods-Keyboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Keyboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Keyboard/Pods-Keyboard.release.xcconfig"; sourceTree = "<group>"; };
 		44726003CD57D48189A591AB /* Pods_EmojiKeyboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EmojiKeyboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		697E7797E0FA371BE46B4339 /* Pods-Keyboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Keyboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Keyboard/Pods-Keyboard.debug.xcconfig"; sourceTree = "<group>"; };
+		881D1F8A207919ED00D856F3 /* EmojiSuggestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiSuggestionCell.swift; sourceTree = "<group>"; };
 		882DD6AE2068165E0041647A /* EmojiKeyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiKeyboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		882DD6B12068165E0041647A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		882DD6B32068165E0041647A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				88D112B1206847BE005B71A8 /* KeyboardView.swift */,
 				882DD6D3206819B00041647A /* KeyButton.swift */,
 				8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */,
+				881D1F8A207919ED00D856F3 /* EmojiSuggestionCell.swift */,
 				882DD6C9206818280041647A /* KeyboardViewController.swift */,
 				8887CFC5206D35E8003502C9 /* Keyboard-Bridging-Header.h */,
 				882DD6CB206818280041647A /* Info.plist */,
@@ -421,6 +424,7 @@
 				8887CFB1206A19A2003502C9 /* Emojis.swift in Sources */,
 				88D112B4206848F2005B71A8 /* Constants.swift in Sources */,
 				88D112AF20683BC2005B71A8 /* EmojiService.swift in Sources */,
+				881D1F8B207919ED00D856F3 /* EmojiSuggestionCell.swift in Sources */,
 				88D112B2206847BE005B71A8 /* KeyboardView.swift in Sources */,
 				88434226206D81AE00F48485 /* Version.swift in Sources */,
 				882DD6CA206818280041647A /* KeyboardViewController.swift in Sources */,

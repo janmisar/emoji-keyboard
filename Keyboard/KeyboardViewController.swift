@@ -63,12 +63,12 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
         switch key {
         case .letter(let char):
             typedText.append(char)
-            (textDocumentProxy as UIKeyInput).insertText(String(char))
+            textDocumentProxy.insertText(String(char))
         case .backspace:
             if !typedText.isEmpty {
                 typedText.remove(at: typedText.index(before: typedText.endIndex))
             }
-            (textDocumentProxy as UIKeyInput).deleteBackward()
+            textDocumentProxy.deleteBackward()
         case .nextKeyboard:
             advanceToNextInputMode()
         }
@@ -77,12 +77,16 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
     
     func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: Emoji) {
         (0..<typedText.count).forEach { _ in
-            (textDocumentProxy as UIKeyInput).deleteBackward()
+            textDocumentProxy.deleteBackward()
         }
-        (textDocumentProxy as UIKeyInput).insertText(emoji.char)
+        textDocumentProxy.insertText(emoji.char)
         typedText = ""
         
         advanceToNextInputMode()
+    }
+    
+    func autocompleteView(_ autocompleteView: AutocompleteView, didSelectEmoji emoji: String) {
+        textDocumentProxy.insertText(emoji)
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
