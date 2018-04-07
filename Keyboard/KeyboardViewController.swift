@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import AudioToolbox
 
 let keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
 
@@ -60,11 +61,19 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
     }
     
     func keyboardView(_ keyboardView: KeyboardView, didTap key: Key) {
+        
+        
         switch key {
         case .letter(let char):
+            DispatchQueue.global(qos: .default).async(execute: {
+                AudioServicesPlaySystemSound(1104)
+            })
             typedText.append(char)
             textDocumentProxy.insertText(String(char))
         case .backspace:
+            DispatchQueue.global(qos: .default).async(execute: {
+                AudioServicesPlaySystemSound(1155)
+            })
             if !typedText.isEmpty {
                 typedText.remove(at: typedText.index(before: typedText.endIndex))
             }
