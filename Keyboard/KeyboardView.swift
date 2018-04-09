@@ -67,6 +67,12 @@ class KeyboardView: UIView {
     init(inputViewController: UIInputViewController) {
         super.init(frame: .zero)
         
+        let forwardingView = ForwardingView()
+        addSubview(forwardingView)
+        forwardingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         let charToKeyButton: (Character) -> KeyButton = { char in
             let key = Key.letter(char)
             
@@ -79,7 +85,7 @@ class KeyboardView: UIView {
         allKeyButtons += keyButtons1
         let row1 = UIStackView(arrangedSubviews: keyButtons1)
         row1.distribution = .fillEqually
-        addSubview(row1)
+        forwardingView.addSubview(row1)
         row1.snp.makeConstraints({ (make) in
             make.leading.trailing.top.equalToSuperview()
             make.height.equalTo(keySize.height+11)
@@ -88,7 +94,7 @@ class KeyboardView: UIView {
         let keyButtons2 = "asdfghjkl".map(charToKeyButton)
         allKeyButtons += keyButtons2
         let row2 = UIStackView(arrangedSubviews: keyButtons2)
-        addSubview(row2)
+        forwardingView.addSubview(row2)
         row2.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
         row2.snp.makeConstraints({ (make) in
             make.top.equalTo(row1.snp.bottom)
@@ -101,7 +107,7 @@ class KeyboardView: UIView {
         let keyButtons3 = "yxcvbnm".map(charToKeyButton)
         allKeyButtons += keyButtons3
         let row3 = UIStackView(arrangedSubviews: keyButtons3)
-        addSubview(row3)
+        forwardingView.addSubview(row3)
         row3.arrangedSubviews.forEach { $0.snp.makeConstraints { $0.width.equalTo(row1.arrangedSubviews.first!.snp.width) } }
         row3.snp.makeConstraints({ (make) in
             make.top.equalTo(row2.snp.bottom)
@@ -114,7 +120,7 @@ class KeyboardView: UIView {
         
         if inputViewController.needsInputModeSwitchKey {
             let nextKeyboardButton = KeyButton(key: .nextKeyboard)
-            addSubview(nextKeyboardButton)
+            forwardingView.addSubview(nextKeyboardButton)
             nextKeyboardButton.snp.makeConstraints { make in
                 make.leading.bottom.equalToSuperview()
                 make.height.equalTo(keySize.height+11)
@@ -126,7 +132,7 @@ class KeyboardView: UIView {
         }
         
         let backspaceButton = KeyButton(key: .backspace)
-        addSubview(backspaceButton)
+        forwardingView.addSubview(backspaceButton)
         backspaceButton.snp.makeConstraints { make in
             make.trailing.bottom.equalToSuperview()
             make.height.equalTo(keySize.height+11)
@@ -134,6 +140,8 @@ class KeyboardView: UIView {
         }
         backspaceButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
         allKeyButtons.append(backspaceButton)
+        
+        forwardingView.keys = allKeyButtons
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -141,6 +149,7 @@ class KeyboardView: UIView {
     }
     
     @objc private func keyPressed(sender: KeyButton) {
+        print("\(sender.key.title) touchUp")
         delegate?.keyboardView(self, didTap: sender.key)
     }
 }

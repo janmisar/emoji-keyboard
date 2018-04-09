@@ -61,8 +61,6 @@ class KeyboardViewController: UIInputViewController, KeyboardViewDelegate, Autoc
     }
     
     func keyboardView(_ keyboardView: KeyboardView, didTap key: Key) {
-        
-        
         switch key {
         case .letter(let char):
             DispatchQueue.global(qos: .default).async(execute: {
