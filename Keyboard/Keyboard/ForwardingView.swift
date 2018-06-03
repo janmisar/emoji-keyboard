@@ -38,8 +38,11 @@ class ForwardingView: UIView {
             return nil
         } else {
             // do not handle input switch key
-            if let view = findNearestView(point), case .nextKeyboard = view.key {
-                return view
+            if let view = findNearestView(point) {
+                switch view.key {
+                case .nextKeyboard, .backspace: return view
+                case .letter(_): break
+                }
             }
             
             return (self.bounds.contains(point) ? self : nil)
@@ -169,6 +172,12 @@ class ForwardingView: UIView {
             
             let oldView = self.touchToView[touch]
             let newView = findNearestView(position)
+            
+            switch newView?.key {
+            case .some(.nextKeyboard), .some(.backspace):
+                return
+            default: break
+            }
             
             if oldView != newView {
                 self.handleControl(oldView, controlEvent: .touchDragExit)

@@ -29,3 +29,9 @@ enum KeyStyle {
     static let shadowOffset = CGSize(width: 0, height: 1.5)
     static let shadowRadius: CGFloat = 0
 }
+
+enum SoundCode: UInt32 {
+    case letter = 1104
+    case backspace = 1155
+    case modifier = 1156
+}

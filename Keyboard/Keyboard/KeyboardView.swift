@@ -7,6 +7,7 @@
 
 import UIKit
 import ACKategories
+import AudioToolbox
 
 enum Key {
     case letter(Character)
@@ -78,6 +79,9 @@ class KeyboardView: UIView {
             
             let keyButton = KeyButton(key: key)
             keyButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
+            keyButton.addTarget(self, action: #selector(self.playKeySound(sender:)), for: .touchDown)
+            keyButton.addTarget(self, action: #selector(self.setKeyHighlighted), for: [.touchDown, .touchDragEnter, .touchDragInside])
+            keyButton.addTarget(self, action: #selector(self.setKeyNormal), for: [.touchDragExit, .touchUpInside])
             return keyButton
         }
         
@@ -127,6 +131,7 @@ class KeyboardView: UIView {
                 make.trailing.equalTo(row3.snp.leading).offset(-4)
             }
             nextKeyboardButton.addTarget(inputViewController, action: #selector(UIInputViewController.handleInputModeList(from:with:)), for: .allTouchEvents)
+            nextKeyboardButton.addTarget(self, action: #selector(self.playKeySound(sender:)), for: .touchDown)
             
             allKeyButtons.append(nextKeyboardButton)
         }
@@ -139,6 +144,7 @@ class KeyboardView: UIView {
             make.leading.equalTo(row3.snp.trailing).offset(4)
         }
         backspaceButton.addTarget(self, action: #selector(self.keyPressed(sender:)), for: .touchUpInside)
+        backspaceButton.addTarget(self, action: #selector(self.playKeySound(sender:)), for: .touchDown)
         allKeyButtons.append(backspaceButton)
         
         forwardingView.keys = allKeyButtons
@@ -149,7 +155,31 @@ class KeyboardView: UIView {
     }
     
     @objc private func keyPressed(sender: KeyButton) {
-        print("\(sender.key.title) touchUp")
         delegate?.keyboardView(self, didTap: sender.key)
+    }
+    
+    @objc private func playKeySound(sender: KeyButton) {
+        switch sender.key {
+        case .letter(_):
+            DispatchQueue.global(qos: .default).async(execute: {
+                AudioServicesPlaySystemSound(SoundCode.letter.rawValue)
+            })
+        case .backspace:
+            DispatchQueue.global(qos: .default).async(execute: {
+                AudioServicesPlaySystemSound(SoundCode.backspace.rawValue)
+            })
+        case .nextKeyboard:
+            DispatchQueue.global(qos: .default).async(execute: {
+                AudioServicesPlaySystemSound(SoundCode.modifier.rawValue)
+            })
+        }
+    }
+    
+    @objc private func setKeyHighlighted(sender: KeyButton) {
+        sender.isHighlighted = true
+    }
+    
+    @objc private func setKeyNormal(sender: KeyButton) {
+        sender.isHighlighted = false
     }
 }

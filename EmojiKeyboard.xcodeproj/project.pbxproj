@@ -161,14 +161,10 @@
 			children = (
 				88434221206D813600F48485 /* Device */,
 				8887CFC4206D35BC003502C9 /* UICollectionViewLeftAlignedLayout */,
-				8887CFB0206A19A2003502C9 /* Emojis.swift */,
-				88D112AE20683BC2005B71A8 /* EmojiService.swift */,
-				881D1F8C207964D800D856F3 /* ForwardingView.swift */,
-				88D112B1206847BE005B71A8 /* KeyboardView.swift */,
-				882DD6D3206819B00041647A /* KeyButton.swift */,
-				8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */,
-				881D1F8A207919ED00D856F3 /* EmojiSuggestionCell.swift */,
+				88F66CE820C42F6400A850CA /* Model */,
 				882DD6C9206818280041647A /* KeyboardViewController.swift */,
+				88F66CE920C42F7200A850CA /* Keyboard */,
+				88F66CE720C42F2D00A850CA /* Autocomplete */,
 				8887CFC5206D35E8003502C9 /* Keyboard-Bridging-Header.h */,
 				882DD6CB206818280041647A /* Info.plist */,
 				88D112B3206848F2005B71A8 /* Constants.swift */,
@@ -202,6 +198,34 @@
 				8887CFC7206D35EB003502C9 /* UICollectionViewLeftAlignedLayout.m */,
 			);
 			path = UICollectionViewLeftAlignedLayout;
+			sourceTree = "<group>";
+		};
+		88F66CE720C42F2D00A850CA /* Autocomplete */ = {
+			isa = PBXGroup;
+			children = (
+				8887CFB2206A1D3E003502C9 /* AutocompleteView.swift */,
+				881D1F8A207919ED00D856F3 /* EmojiSuggestionCell.swift */,
+			);
+			path = Autocomplete;
+			sourceTree = "<group>";
+		};
+		88F66CE820C42F6400A850CA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8887CFB0206A19A2003502C9 /* Emojis.swift */,
+				88D112AE20683BC2005B71A8 /* EmojiService.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		88F66CE920C42F7200A850CA /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				88D112B1206847BE005B71A8 /* KeyboardView.swift */,
+				882DD6D3206819B00041647A /* KeyButton.swift */,
+				881D1F8C207964D800D856F3 /* ForwardingView.swift */,
+			);
+			path = Keyboard;
 			sourceTree = "<group>";
 		};
 		9C7BF1F722E96B2E4B1CF3CA /* Frameworks */ = {

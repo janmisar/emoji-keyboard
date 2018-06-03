@@ -43,6 +43,7 @@ final class AutocompleteView: UIView, UICollectionViewDataSource, UICollectionVi
         collectionView.backgroundColor = UIColor.white.withAlphaComponent(0.001)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.delaysContentTouches = false
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
