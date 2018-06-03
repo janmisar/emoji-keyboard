@@ -36,8 +36,8 @@ class ForwardingView: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent!) -> UIView? {
         if self.isHidden || self.alpha == 0 || !self.isUserInteractionEnabled {
             return nil
-        }
-        else {
+        } else {
+            // do not handle input switch key
             if let view = findNearestView(point), case .nextKeyboard = view.key {
                 return view
             }
@@ -79,16 +79,14 @@ class ForwardingView: UIView {
                 if distance < closest!.1 {
                     closest = (view, distance)
                 }
-            }
-            else {
+            } else {
                 closest = (view, distance)
             }
         }
         
         if closest != nil {
             return closest!.0
-        }
-        else {
+        } else {
             return nil
         }
     }
@@ -103,14 +101,13 @@ class ForwardingView: UIView {
         
         if (rect.origin.x + rect.size.width < point.x) {
             closest.x += rect.size.width
-        }
-        else if (point.x > rect.origin.x) {
+        } else if (point.x > rect.origin.x) {
             closest.x = point.x
         }
+        
         if (rect.origin.y + rect.size.height < point.y) {
             closest.y += rect.size.height
-        }
-        else if (point.y > rect.origin.y) {
+        } else if (point.y > rect.origin.y) {
             closest.y = point.y
         }
         
@@ -135,8 +132,7 @@ class ForwardingView: UIView {
                 if viewToOwn == view {
                     if touch == newTouch {
                         break
-                    }
-                    else {
+                    } else {
                         self.touchToView[touch] = nil
                         foundView = true
                     }
@@ -181,12 +177,10 @@ class ForwardingView: UIView {
                 
                 if !viewChangedOwnership {
                     self.handleControl(newView, controlEvent: .touchDragEnter)
-                }
-                else {
+                } else {
                     self.handleControl(newView, controlEvent: .touchDragInside)
                 }
-            }
-            else {
+            } else {
                 self.handleControl(oldView, controlEvent: .touchDragInside)
             }
         }
@@ -200,8 +194,7 @@ class ForwardingView: UIView {
             
             if self.bounds.contains(touchPosition) {
                 self.handleControl(view, controlEvent: .touchUpInside)
-            }
-            else {
+            } else {
                 self.handleControl(view, controlEvent: .touchCancel)
             }
             
