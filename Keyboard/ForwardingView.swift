@@ -38,6 +38,10 @@ class ForwardingView: UIView {
             return nil
         }
         else {
+            if let view = findNearestView(point), case .nextKeyboard = view.key {
+                return view
+            }
+            
             return (self.bounds.contains(point) ? self : nil)
         }
     }
@@ -150,11 +154,6 @@ class ForwardingView: UIView {
             let position = touch.location(in: self)
             let view = findNearestView(position)
             
-            if let view = view, case .nextKeyboard = view.key {
-                super.touchesBegan(touches, with: event)
-                return
-            }
-            
             let viewChangedOwnership = self.ownView(touch, viewToOwn: view)
             
             if !viewChangedOwnership {
@@ -174,11 +173,6 @@ class ForwardingView: UIView {
             
             let oldView = self.touchToView[touch]
             let newView = findNearestView(position)
-            
-            if let view = view, case .nextKeyboard = view.key {
-                super.touchesEnded(touches, with: event)
-                return
-            }
             
             if oldView != newView {
                 self.handleControl(oldView, controlEvent: .touchDragExit)
@@ -201,11 +195,6 @@ class ForwardingView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let view = self.touchToView[touch]
-            
-            if let view = view, case .nextKeyboard = view.key {
-                super.touchesEnded(touches, with: event)
-                return
-            }
             
             let touchPosition = touch.location(in: self)
             
